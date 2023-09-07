@@ -4,6 +4,8 @@
 /* eslint-disable no-plusplus */
 import React from 'react';
 
+import { getTotalItems } from '../../utils';
+
 interface Props {
   total: number,
   perPage: number,
@@ -17,51 +19,57 @@ export const Pagination: React.FC<Props> = ({
   currentPage,
   onPageChange,
 }) => {
-  function getTotalItems(totalElements: number, itemsPerPage: number) {
-    const groups = Math.ceil(totalElements / itemsPerPage);
-    const result = [];
-
-    for (let i = 1; i <= groups; i++) {
-      result.push(i);
-    }
-
-    return result;
-  }
-
   const totalArray = getTotalItems(total, perPage);
+  let newPage = currentPage;
 
   console.log(currentPage);
 
   return (
     <ul className="pagination">
-      <li className="page-item disabled">
+      <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
         <a
           data-cy="prevLink"
           className="page-link"
           href="#prev"
-          aria-disabled="true"
+          aria-disabled={currentPage === 1 ? 'true' : 'false'}
+          onClick={() => {
+            onPageChange(currentPage - 1);
+          }}
         >
           «
         </a>
       </li>
       {totalArray.map((item) => (
         <li
+          key={item}
           className={`page-item ${currentPage === item ? 'active' : ''}`}
           onClick={() => {
             if (currentPage !== item) {
-              onPageChange(currentPage);
+              onPageChange(newPage);
             }
           }}
         >
-          <a data-cy="pageLink" className="page-link" href={`#${item}`}>{item}</a>
+          <a
+            data-cy="pageLink"
+            className="page-link"
+            href={`#${item}`}
+            onClick={(event) => {
+              newPage = Number(event.currentTarget.textContent);
+            }}
+          >
+            {item}
+          </a>
         </li>
       ))}
-      <li className="page-item">
+      <li className={`page-item ${currentPage === totalArray.length ? 'disabled' : ''}`}>
         <a
           data-cy="nextLink"
           className="page-link"
           href="#next"
-          aria-disabled="false"
+          aria-disabled={currentPage === total ? 'true' : 'false'}
+          onClick={() => {
+            onPageChange(currentPage + 1);
+          }}
         >
           »
         </a>

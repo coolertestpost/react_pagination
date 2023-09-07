@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import React, { useState } from 'react';
 import './App.css';
 import { getNumbers } from './utils';
@@ -16,7 +17,7 @@ export const App: React.FC = () => {
       <h1>Items with Pagination</h1>
 
       <p className="lead" data-cy="info">
-        Page 1 (items 1 - 5 of 42)
+        {`Page ${currentPage} (items ${(perPage * (currentPage - 1)) + 1} - ${perPage * currentPage} of ${items.length})`}
       </p>
 
       <div className="form-group row">
@@ -29,6 +30,7 @@ export const App: React.FC = () => {
             onChange={
               (event) => {
                 setPerPage(Number(event.target.value));
+                setCurrentPage(1);
               }
             }
           >
@@ -54,8 +56,8 @@ export const App: React.FC = () => {
         }}
       />
       <ul>
-        {items.slice(0, 5).map((item) => (
-          <li data-cy="item">{item}</li>
+        {items.slice((perPage * (currentPage - 1)), perPage * currentPage).map((item) => (
+          <li key={item} data-cy="item">{item}</li>
         ))}
       </ul>
     </div>

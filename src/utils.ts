@@ -1,3 +1,5 @@
+/* eslint-disable no-plusplus */
+
 export function getNumbers(from: number, to: number): number[] {
   const numbers = [];
 
@@ -6,4 +8,15 @@ export function getNumbers(from: number, to: number): number[] {
   }
 
   return numbers;
+}
+
+export function getTotalItems(totalElements: number, itemsPerPage: number) {
+  const groups = Math.ceil(totalElements / itemsPerPage);
+  const result = [];
+
+  for (let i = 1; i <= groups; i++) {
+    result.push(i);
+  }
+
+  return result;
 }
